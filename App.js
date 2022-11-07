@@ -1,13 +1,16 @@
 import { StatusBar } from "expo-status-bar"
-import { StyleSheet, Text, View } from "react-native"
+import { SafeAreaView, StyleSheet, Text, View } from "react-native"
+import AuthProvider from "./src/context/auth"
 import Routes from "./src/routes"
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Routes />
+    <SafeAreaView style={styles.container}>
       <StatusBar />
-    </View>
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
+    </SafeAreaView>
   )
 }
 

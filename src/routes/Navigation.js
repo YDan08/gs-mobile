@@ -1,11 +1,25 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { Home } from "../screens/Home"
+import { Cadastro, CadastroOcorrencia, Home, Login } from "../screens"
 const { Screen, Navigator } = createNativeStackNavigator()
 
-export const Navigation = () => {
+export const NavigationLogout = () => {
   return (
-    <Navigator>
-      <Screen name='home' component={Home} options={{ title: "Home" }} />
+    <Navigator initialRouteName='login' screenOptions={{ headerShown: false }}>
+      <Screen name='cadastro' component={Cadastro} />
+      <Screen name='login' component={Login} />
+    </Navigator>
+  )
+}
+
+export const NavigationOcorrencias = () => {
+  return (
+    <Navigator initialRouteName='home' screenOptions={{ headerShown: false }}>
+      <Screen name='home' component={Home} />
+      <Screen
+        name='cadastroOcorrencia'
+        component={CadastroOcorrencia}
+        options={{ animation: "slide_from_right" }}
+      />
     </Navigator>
   )
 }

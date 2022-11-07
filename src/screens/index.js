@@ -1,0 +1,6 @@
+export * from "./Cadastro"
+export * from "./Home"
+export * from "./Login"
+export * from "./CadastroOcorrencia"
+export * from "./MinhasOcorrencias"
+export * from "./Perfil"

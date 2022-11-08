@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { Cadastro, CadastroOcorrencia, Home, Login } from "../screens"
+import { Cadastro, CadastroOcorrencia, Home, Login, Ocorrencia } from "../screens"
 const { Screen, Navigator } = createNativeStackNavigator()
 
 export const NavigationLogout = () => {
@@ -20,6 +20,7 @@ export const NavigationOcorrencias = () => {
         component={CadastroOcorrencia}
         options={{ animation: "slide_from_right" }}
       />
+      <Screen name='ocorrencia' component={Ocorrencia} options={{ animation: "slide_from_right" }} />
     </Navigator>
   )
 }

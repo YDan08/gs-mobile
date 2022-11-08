@@ -9,12 +9,12 @@ export const Perfil = () => {
   const { handleLogout } = useContext(AuthContext)
   return (
     <View style={styles.container}>
-      <Text variant='headlineMedium'>Cadastro de usuário</Text>
-      <View style={styles.divLogout}>
-        <Button style={styles.botao} onPress={() => handleLogout()}>
-          Sair
-        </Button>
-      </View>
+      <Text variant='headlineMedium' style={styles.titulo}>
+        Olá
+      </Text>
+      <Button style={styles.botao} mode='elevated' onPress={() => handleLogout()}>
+        Sair
+      </Button>
       <View style={styles.divInputs}>
         <Controller
           name='nome'
@@ -83,10 +83,10 @@ export const Perfil = () => {
         />
       </View>
       <View style={styles.divBotoes}>
-        <Button mode='contained' style={styles.botao}>
+        <Button mode='contained' style={[styles.botao, styles.botaoExcluir]}>
           Excluir
         </Button>
-        <Button mode='contained' style={styles.botao}>
+        <Button mode='contained' style={[styles.botao, styles.botaoAtualizar]}>
           Atualizar
         </Button>
       </View>
@@ -124,5 +124,16 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     flexDirection: "row",
     justifyContent: "flex-end",
+  },
+  titulo: {
+    marginBottom: 12,
+    fontWeight: "bold",
+    color: "#966B9D",
+  },
+  botaoExcluir: {
+    backgroundColor: "#f26f6f",
+  },
+  botaoAtualizar: {
+    backgroundColor: "#966B9D",
   },
 })

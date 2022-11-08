@@ -4,7 +4,7 @@ import { Button, Text } from "react-native-paper"
 export const MinhasOcorrencias = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Text variant='headlineSmall' style={{ marginTop: 20 }}>
+      <Text variant='headlineSmall' style={styles.titulo}>
         Minhas ocorrências
       </Text>
 
@@ -13,9 +13,14 @@ export const MinhasOcorrencias = () => {
           <Text>Rua: Rua Augusto</Text>
           <Text>Bairro: Vila Lara</Text>
           <Text>Nível de perigo: Alto</Text>
+          <Text>Data: 20/09/2022 18:20</Text>
           <View style={styles.divOpcoesOcorrencia}>
-            <Button>Editar</Button>
-            <Button>Excluir</Button>
+            <Button icon='square-edit-outline' textColor='#966B9D'>
+              Editar
+            </Button>
+            <Button icon='trash-can-outline' textColor='#966B9D'>
+              Excluir
+            </Button>
           </View>
         </View>
 
@@ -23,9 +28,14 @@ export const MinhasOcorrencias = () => {
           <Text>Rua: Rua Augusto</Text>
           <Text>Bairro: Vila Lara</Text>
           <Text>Nível de perigo: Alto</Text>
+          <Text>Data: 20/09/2022 18:20</Text>
           <View style={styles.divOpcoesOcorrencia}>
-            <Button>Editar</Button>
-            <Button>Excluir</Button>
+            <Button icon='square-edit-outline' textColor='#966B9D'>
+              Editar
+            </Button>
+            <Button icon='trash-can-outline' textColor='#966B9D'>
+              Excluir
+            </Button>
           </View>
         </View>
 
@@ -33,9 +43,14 @@ export const MinhasOcorrencias = () => {
           <Text>Rua: Rua Augusto</Text>
           <Text>Bairro: Vila Lara</Text>
           <Text>Nível de perigo: Alto</Text>
+          <Text>Data: 20/09/2022 18:20</Text>
           <View style={styles.divOpcoesOcorrencia}>
-            <Button>Editar</Button>
-            <Button>Excluir</Button>
+            <Button icon='square-edit-outline' textColor='#966B9D'>
+              Editar
+            </Button>
+            <Button icon='trash-can-outline' textColor='#966B9D'>
+              Excluir
+            </Button>
           </View>
         </View>
       </ScrollView>
@@ -62,8 +77,9 @@ const styles = StyleSheet.create({
   containerOcorrencias: {
     marginVertical: 20,
   },
-  botao: {
-    width: 300,
+  titulo: {
+    color: "#966B9D",
+    marginTop: 20,
   },
   divOpcoesOcorrencia: {
     flexDirection: "row",

@@ -7,9 +7,12 @@ import { AuthContext } from "../../context/auth"
 export const Cadastro = ({ navigation }) => {
   const { handleSubmit, control } = useForm()
   const { handleLogin } = useContext(AuthContext)
+
   return (
     <View style={styles.container}>
-      <Text variant='headlineMedium'>Cadastro de usuário</Text>
+      <Text variant='headlineMedium' style={styles.titulo}>
+        Cadastro de usuário
+      </Text>
       <View style={styles.divInputs}>
         <Controller
           name='nome'
@@ -76,6 +79,8 @@ export const Cadastro = ({ navigation }) => {
             />
           )}
         />
+        <Text>Data de Nascimento:</Text>
+        <Button onPress={() => setOpen(true)}>mudar</Button>
       </View>
       <View style={styles.divBotoes}>
         <Button mode='contained' onPress={() => navigation.goBack()} style={styles.botao}>
@@ -107,11 +112,17 @@ const styles = StyleSheet.create({
   },
   botao: {
     width: 120,
+    backgroundColor: "#966B9D",
   },
   divBotoes: {
     width: 300,
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 12,
+  },
+  titulo: {
+    marginBottom: 12,
+    fontWeight: "bold",
+    color: "#966B9D",
   },
 })

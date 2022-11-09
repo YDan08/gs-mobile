@@ -13,7 +13,6 @@ export const Cadastro = ({ navigation }) => {
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate
     setDate(currentDate)
-    console.log(currentDate)
   }
 
   const show = () => {
@@ -21,7 +20,6 @@ export const Cadastro = ({ navigation }) => {
       value: date,
       onChange,
       mode: "date",
-      locale: "pt-BR",
       maximumDate: Date.now(),
     })
   }

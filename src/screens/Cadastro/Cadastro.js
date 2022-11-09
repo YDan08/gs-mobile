@@ -1,4 +1,6 @@
-import { useContext } from "react"
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
+import moment from "moment/moment"
+import { useContext, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { StyleSheet, View } from "react-native"
 import { Button, Text, TextInput } from "react-native-paper"
@@ -7,6 +9,22 @@ import { AuthContext } from "../../context/auth"
 export const Cadastro = ({ navigation }) => {
   const { handleSubmit, control } = useForm()
   const { handleLogin } = useContext(AuthContext)
+  const [date, setDate] = useState(new Date())
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate
+    setDate(currentDate)
+    console.log(currentDate)
+  }
+
+  const show = () => {
+    DateTimePickerAndroid.open({
+      value: date,
+      onChange,
+      mode: "date",
+      locale: "pt-BR",
+      maximumDate: Date.now(),
+    })
+  }
 
   return (
     <View style={styles.container}>
@@ -79,8 +97,11 @@ export const Cadastro = ({ navigation }) => {
             />
           )}
         />
-        <Text>Data de Nascimento:</Text>
-        <Button onPress={() => setOpen(true)}>mudar</Button>
+        <View style={styles.divDataNascimento}>
+          <Text>Data de Nascimento</Text>
+          <Text style={styles.textData}>{moment(date).format("DD/MM/YYYY")}</Text>
+          <Button onPress={show}>mudar</Button>
+        </View>
       </View>
       <View style={styles.divBotoes}>
         <Button mode='contained' onPress={() => navigation.goBack()} style={styles.botao}>
@@ -124,5 +145,11 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     fontWeight: "bold",
     color: "#966B9D",
+  },
+  divDataNascimento: {
+    marginVertical: 16,
+  },
+  textData: {
+    marginVertical: 4,
   },
 })

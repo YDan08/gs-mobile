@@ -2,15 +2,53 @@ import { useContext } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { StyleSheet, View } from "react-native"
 import { Button, Text, TextInput } from "react-native-paper"
+import { api } from "../../api"
 import { AuthContext } from "../../context/auth"
 
 export const Perfil = () => {
-  const { handleSubmit, control } = useForm()
-  const { handleLogout } = useContext(AuthContext)
+  const { handleLogout, mulher } = useContext(AuthContext)
+  const { handleSubmit, control } = useForm({
+    defaultValues: {
+      nome: mulher.nomeMulher,
+      email: mulher.email,
+      senha: mulher.senha,
+      telefone: `${mulher.telefone}`,
+      cpf: `${mulher.cpf}`,
+    },
+  })
+
+  const onSubmit = async user => {
+    const dados = {
+      nomeMulher: user.nome,
+      email: user.email,
+      senha: user.senha,
+      dtNascimento: mulher.dtNascimento,
+      cpf: user.cpf,
+      cpfDigito: 12,
+      telefone: user.telefone,
+      telefoneDDD: 11,
+    }
+
+    try {
+      await api.put(`/api/mulher/${mulher.codMulher}`, dados)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const excluirConta = async () => {
+    try {
+      await api.delete(`/api/mulher/${mulher.codMulher}`)
+      handleLogout()
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text variant='headlineMedium' style={styles.titulo}>
-        Olá
+        Olá, {mulher && mulher.nomeMulher.split(" ")[0]}
       </Text>
       <Button style={styles.botao} mode='elevated' onPress={() => handleLogout()}>
         Sair
@@ -65,6 +103,7 @@ export const Perfil = () => {
               onChangeText={onChange}
               value={value}
               style={styles.input}
+              keyboardType='numeric'
             />
           )}
         />
@@ -83,10 +122,14 @@ export const Perfil = () => {
         />
       </View>
       <View style={styles.divBotoes}>
-        <Button mode='contained' style={[styles.botao, styles.botaoExcluir]}>
+        <Button mode='contained' style={[styles.botao, styles.botaoExcluir]} onPress={() => excluirConta()}>
           Excluir
         </Button>
-        <Button mode='contained' style={[styles.botao, styles.botaoAtualizar]}>
+        <Button
+          mode='contained'
+          style={[styles.botao, styles.botaoAtualizar]}
+          onPress={handleSubmit(onSubmit)}
+        >
           Atualizar
         </Button>
       </View>

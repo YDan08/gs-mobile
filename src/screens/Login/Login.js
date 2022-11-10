@@ -40,7 +40,7 @@ export const Login = ({ navigation }) => {
           )}
         />
       </View>
-      <Button mode='contained' onPress={() => handleLogin()} style={styles.botao}>
+      <Button mode='contained' onPress={handleSubmit(handleLogin)} style={styles.botao}>
         Entrar
       </Button>
       <Button

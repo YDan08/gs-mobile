@@ -4,6 +4,7 @@ import { useContext, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { StyleSheet, View } from "react-native"
 import { Button, Text, TextInput } from "react-native-paper"
+import { api } from "../../api"
 import { AuthContext } from "../../context/auth"
 
 export const Cadastro = ({ navigation }) => {
@@ -24,6 +25,25 @@ export const Cadastro = ({ navigation }) => {
     })
   }
 
+  const onSubmit = async user => {
+    const mulher = {
+      nomeMulher: user.nome,
+      email: user.email,
+      senha: user.senha,
+      dtNascimento: moment(date).format("DD/MM/YYYY"),
+      cpf: user.cpf,
+      cpfDigito: 12,
+      telefone: user.telefone,
+      telefoneDDD: 11,
+    }
+
+    try {
+      await api.post("/api/mulher", mulher)
+      navigation.navigate("login")
+    } catch (err) {
+      console.log(err)
+    }
+  }
   return (
     <View style={styles.container}>
       <Text variant='headlineMedium' style={styles.titulo}>
@@ -105,7 +125,7 @@ export const Cadastro = ({ navigation }) => {
         <Button mode='contained' onPress={() => navigation.goBack()} style={styles.botao}>
           Voltar
         </Button>
-        <Button mode='contained' style={styles.botao} onPress={() => handleLogin()}>
+        <Button mode='contained' style={styles.botao} onPress={handleSubmit(onSubmit)}>
           Cadastrar
         </Button>
       </View>

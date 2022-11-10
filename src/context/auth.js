@@ -1,23 +1,60 @@
-import { createContext, useState } from "react"
+import { createContext, useEffect, useState } from "react"
+import { api } from "../api"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export const AuthContext = createContext({
-  handleLogin: () => {},
+  handleLogin: dados => {},
   handleLogout: () => {},
 })
 
 export const AuthProvider = ({ children }) => {
   const [logged, setLogged] = useState(false)
-
-  const handleLogin = () => {
-    setLogged(true)
+  const [mulher, setMulher] = useState()
+  const handleLogin = async dados => {
+    const mulheres = await (await api.get("/api/mulher")).data
+    const mulher =
+      mulheres && mulheres.filter(info => info.email === dados.email && info.senha === dados.senha)[0]
+    await AsyncStorage.removeItem("@id")
+    if (mulher) {
+      await AsyncStorage.setItem("@id", JSON.stringify(mulher.codMulher))
+      setMulher(mulher)
+      setLogged(true)
+    }
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("@id")
+    setMulher(false)
     setLogged(false)
   }
 
+  const verificarUser = async () => {
+    const infoUser = await AsyncStorage.getItem("@id")
+    if (infoUser) {
+      const mulher = await (await api.get(`/api/mulher/${infoUser}`)).data
+      if (mulher) {
+        setMulher(mulher)
+        setLogged(true)
+      } else {
+        await AsyncStorage.removeItem("@id")
+        setMulher(false)
+        setLogged(false)
+      }
+    } else {
+      await AsyncStorage.removeItem("@id")
+      setMulher(false)
+      setLogged(false)
+    }
+  }
+
+  useEffect(() => {
+    verificarUser()
+  }, [])
+
   return (
-    <AuthContext.Provider value={{ handleLogin, handleLogout, logged }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ handleLogin, handleLogout, logged, mulher }}>
+      {children}
+    </AuthContext.Provider>
   )
 }
 

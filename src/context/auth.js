@@ -5,11 +5,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 export const AuthContext = createContext({
   handleLogin: dados => {},
   handleLogout: () => {},
+  pegarOcorrencias: () => {},
 })
 
 export const AuthProvider = ({ children }) => {
   const [logged, setLogged] = useState(false)
   const [mulher, setMulher] = useState()
+  const [lista, setLista] = useState([])
+
   const handleLogin = async dados => {
     const mulheres = await (await api.get("/api/mulher")).data
     const mulher =
@@ -47,12 +50,29 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const pegarOcorrencias = async () => {
+    const data = await (await api.get("/api/localEscolhido")).data
+    if (data) {
+      setLista(data)
+    }
+  }
+
   useEffect(() => {
     verificarUser()
+    pegarOcorrencias()
   }, [])
 
   return (
-    <AuthContext.Provider value={{ handleLogin, handleLogout, logged, mulher }}>
+    <AuthContext.Provider
+      value={{
+        handleLogin,
+        handleLogout,
+        logged,
+        mulher,
+        pegarOcorrencias,
+        lista,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )

@@ -1,15 +1,14 @@
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
 import moment from "moment/moment"
-import { useContext, useState } from "react"
+import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { StyleSheet, View } from "react-native"
 import { Button, Text, TextInput } from "react-native-paper"
 import { api } from "../../api"
-import { AuthContext } from "../../context/auth"
 
 export const Cadastro = ({ navigation }) => {
   const { handleSubmit, control } = useForm()
-  const { handleLogin } = useContext(AuthContext)
+
   const [date, setDate] = useState(new Date())
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate

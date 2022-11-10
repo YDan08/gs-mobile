@@ -1,13 +1,18 @@
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
 import moment from "moment/moment"
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native"
-import { Button, Text, TextInput } from "react-native-paper"
+import { Button, RadioButton, Text, TextInput } from "react-native-paper"
+import { api } from "../../api"
+import { AuthContext } from "../../context/auth"
 
-export const CadastroOcorrencia = ({ navigation }) => {
-  const { handleSubmit, control } = useForm()
+export const CadastroOcorrencia = ({ navigation, route }) => {
+  const id = route.params?.id
+  const { mulher, pegarOcorrencias } = useContext(AuthContext)
+  const { handleSubmit, control, setValue } = useForm()
   const [date, setDate] = useState(new Date())
+  const [ocorrenciaDate, setOcorrenciaDate] = useState()
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate
     setDate(currentDate)
@@ -21,10 +26,74 @@ export const CadastroOcorrencia = ({ navigation }) => {
       maximumDate: Date.now(),
     })
   }
+
+  const pegarIncidente = async () => {
+    if (id) {
+      const data = await (await api.get(`/api/localEscolhido/${id}`)).data
+      if (data) {
+        setValue("incidente", data.incidente)
+        setValue("nivel", data.avaliacaoPerigo)
+        setValue("rua", data.endereco.nomeRua)
+        setValue("complemento", data.endereco.desComplemento)
+        setValue("bairro", data.endereco.bairro.nomeBairro)
+        setOcorrenciaDate(data.dtOcorrencia)
+      }
+    }
+  }
+
+  useEffect(() => {
+    pegarIncidente()
+  }, [])
+
+  const onSubmit = async dados => {
+    const ocorrencia = {
+      codMulher: mulher.codMulher,
+      incidente: dados.incidente,
+      dtOcorrencia: id ? ocorrenciaDate : moment(date).format("DD/MM/YYYY"),
+      avaliacaoPerigo: dados.nivel,
+      endereco: {
+        nomeRua: dados.rua,
+        desComplemento: dados.complemento,
+        bairro: {
+          nomeBairro: dados.bairro,
+          cidade: {
+            nomeCidade: "São Paulo",
+            siglaCidade: "SP",
+            estado: {
+              nomeEstado: "São paulo",
+              siglaEstado: "SP",
+            },
+          },
+        },
+      },
+    }
+    if (id) {
+      try {
+        await api.put(`/api/localEscolhido/${id}`, ocorrencia)
+        pegarOcorrencias()
+
+        navigation.navigate("home")
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      try {
+        await api.post("/api/localEscolhido", ocorrencia)
+        pegarOcorrencias()
+
+        navigation.navigate("home")
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
+
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text variant='headlineMedium'>Cadastro de ocorrência</Text>
+        <Text variant='headlineMedium' style={styles.titulo}>
+          Cadastro de ocorrência
+        </Text>
         <View style={styles.divInputs}>
           <Controller
             name='rua'
@@ -53,11 +122,11 @@ export const CadastroOcorrencia = ({ navigation }) => {
             )}
           />
           <Controller
-            name='cidade'
+            name='complemento'
             control={control}
             render={({ field: { onChange, value } }) => (
               <TextInput
-                label='Cidade'
+                label='Complemento'
                 mode='outlined'
                 onChangeText={onChange}
                 value={value}
@@ -81,17 +150,46 @@ export const CadastroOcorrencia = ({ navigation }) => {
               />
             )}
           />
-          <View style={styles.divDataOcorrencia}>
-            <Text>Data do ocorrido</Text>
-            <Text style={styles.textData}>{moment(date).format("DD/MM/YYYY")}</Text>
-            <Button onPress={show}>mudar</Button>
-          </View>
+
+          <Controller
+            name='nivel'
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <RadioButton.Group onValueChange={onChange} value={value}>
+                <View style={styles.divRadio}>
+                  <Text>Nível de perigo:</Text>
+                  <View style={styles.optionsRadio}>
+                    <View style={styles.option}>
+                      <RadioButton value={3} />
+                      <Text>Alto</Text>
+                    </View>
+                    <View style={styles.option}>
+                      <RadioButton value={2} />
+                      <Text>Médio</Text>
+                    </View>
+                    <View style={styles.option}>
+                      <RadioButton value={1} />
+                      <Text>Baixo</Text>
+                    </View>
+                  </View>
+                </View>
+              </RadioButton.Group>
+            )}
+          />
+
+          {!id && (
+            <View style={styles.divDataOcorrencia}>
+              <Text>Data do ocorrido</Text>
+              <Text style={styles.textData}>{moment(date).format("DD/MM/YYYY")}</Text>
+              <Button onPress={show}>mudar</Button>
+            </View>
+          )}
         </View>
         <View style={styles.divBotoes}>
           <Button mode='contained' onPress={() => navigation.goBack()} style={styles.botao}>
             Voltar
           </Button>
-          <Button mode='contained' style={styles.botao} onPress={() => navigation.navigate("home")}>
+          <Button mode='contained' style={styles.botao} onPress={handleSubmit(onSubmit)}>
             Cadastrar
           </Button>
         </View>
@@ -129,5 +227,23 @@ const styles = StyleSheet.create({
   },
   textData: {
     marginVertical: 4,
+  },
+  divRadio: {
+    marginVertical: 12,
+  },
+  optionsRadio: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 8,
+  },
+  option: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  titulo: {
+    color: "#966B9D",
+    marginTop: 20,
   },
 })

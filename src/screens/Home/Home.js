@@ -1,60 +1,29 @@
-import React from "react"
-import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native"
-import { Button, Text, TouchableRipple } from "react-native-paper"
+import React, { useContext } from "react"
+import { FlatList, SafeAreaView, StyleSheet } from "react-native"
+import { Button, Text } from "react-native-paper"
+
+import Ocorrencia from "../../components/Ocorrencia"
+import { AuthContext } from "../../context/auth"
 
 export const Home = ({ navigation }) => {
+  const { lista } = useContext(AuthContext)
+  const renderItem = ({ item }) => (
+    <Ocorrencia
+      rua={item.endereco.nomeRua}
+      nivelPerigo={item.avaliacaoPerigo}
+      data={item.dtOcorrencia}
+      bairro={item.endereco.bairro.nomeBairro}
+      id={item.codLocal}
+    />
+  )
+
   return (
     <SafeAreaView style={styles.container}>
       <Text variant='headlineSmall' style={styles.titulo}>
         Lista de ocorrências
       </Text>
 
-      <ScrollView style={styles.containerOcorrencias}>
-        <TouchableRipple onPress={() => navigation.navigate("ocorrencia")} style={styles.divOcorrencia}>
-          <View>
-            <Text>Rua: Rua Augusto</Text>
-            <Text>Bairro: Vila Lara</Text>
-            <Text>Nível de perigo: Alto</Text>
-            <Text>Data: 20/09/2022 18:20</Text>
-          </View>
-        </TouchableRipple>
-
-        <TouchableRipple onPress={() => navigation.navigate("ocorrencia")} style={styles.divOcorrencia}>
-          <View>
-            <Text>Rua: Rua Augusto</Text>
-            <Text>Bairro: Vila Lara</Text>
-            <Text>Nível de perigo: Alto</Text>
-            <Text>Data: 20/09/2022 18:20</Text>
-          </View>
-        </TouchableRipple>
-
-        <TouchableRipple onPress={() => navigation.navigate("ocorrencia")} style={styles.divOcorrencia}>
-          <View>
-            <Text>Rua: Rua Augusto</Text>
-            <Text>Bairro: Vila Lara</Text>
-            <Text>Nível de perigo: Alto</Text>
-            <Text>Data: 20/09/2022 18:20</Text>
-          </View>
-        </TouchableRipple>
-
-        <TouchableRipple onPress={() => navigation.navigate("ocorrencia")} style={styles.divOcorrencia}>
-          <View>
-            <Text>Rua: Rua Augusto</Text>
-            <Text>Bairro: Vila Lara</Text>
-            <Text>Nível de perigo: Alto</Text>
-            <Text>Data: 20/09/2022 18:20</Text>
-          </View>
-        </TouchableRipple>
-
-        <TouchableRipple onPress={() => navigation.navigate("ocorrencia")} style={styles.divOcorrencia}>
-          <View>
-            <Text>Rua: Rua Augusto</Text>
-            <Text>Bairro: Vila Lara</Text>
-            <Text>Nível de perigo: Alto</Text>
-            <Text>Data: 20/09/2022 18:20</Text>
-          </View>
-        </TouchableRipple>
-      </ScrollView>
+      <FlatList data={lista} renderItem={renderItem} style={styles.lista} />
 
       <Button
         mode='contained'
@@ -76,16 +45,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  divOcorrencia: {
-    width: 320,
-    padding: 20,
-    borderRadius: 12,
-    borderWidth: 1,
-    marginVertical: 12,
-  },
-  containerOcorrencias: {
-    marginVertical: 20,
-  },
   botao: {
     width: 300,
     backgroundColor: "#966B9D",
@@ -93,5 +52,8 @@ const styles = StyleSheet.create({
   titulo: {
     color: "#966B9D",
     marginTop: 20,
+  },
+  lista: {
+    marginBottom: 12,
   },
 })

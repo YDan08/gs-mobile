@@ -21,7 +21,7 @@ export const UserOcorrencia = ({ rua, nivelPerigo, data, bairro, id }) => {
       <View>
         <Text>Rua: {rua}</Text>
         <Text>Bairro: {bairro}</Text>
-        <Text>Nível de perigo: {nivelPerigo}</Text>
+        <Text>Nível de perigo: {nivelPerigo === 1 ? "baixo" : nivelPerigo === 2 ? "médio" : "alto"}</Text>
         <Text>Data: {data}</Text>
         <View style={styles.divOpcoesOcorrencia}>
           <Button

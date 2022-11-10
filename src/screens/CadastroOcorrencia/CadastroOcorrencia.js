@@ -190,6 +190,7 @@ export const CadastroOcorrencia = ({ navigation, route }) => {
             Voltar
           </Button>
           <Button mode='contained' style={styles.botao} onPress={handleSubmit(onSubmit)}>
+            {id ? "Atualizar" : "Cadastrar"}
             Cadastrar
           </Button>
         </View>

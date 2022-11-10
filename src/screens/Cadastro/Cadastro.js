@@ -2,7 +2,7 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
 import moment from "moment/moment"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { StyleSheet, View } from "react-native"
+import { ScrollView, StyleSheet, View } from "react-native"
 import { Button, Text, TextInput } from "react-native-paper"
 import { api } from "../../api"
 
@@ -44,91 +44,93 @@ export const Cadastro = ({ navigation }) => {
     }
   }
   return (
-    <View style={styles.container}>
-      <Text variant='headlineMedium' style={styles.titulo}>
-        Cadastro de usuário
-      </Text>
-      <View style={styles.divInputs}>
-        <Controller
-          name='nome'
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              label='Nome Completo'
-              mode='outlined'
-              onChangeText={onChange}
-              value={value}
-              style={styles.input}
-            />
-          )}
-        />
-        <Controller
-          name='email'
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              label='Email'
-              mode='outlined'
-              onChangeText={onChange}
-              value={value}
-              style={styles.input}
-            />
-          )}
-        />
-        <Controller
-          name='senha'
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              label='Senha'
-              mode='outlined'
-              onChangeText={onChange}
-              value={value}
-              style={styles.input}
-            />
-          )}
-        />
-        <Controller
-          name='telefone'
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              label='Telefone'
-              mode='outlined'
-              onChangeText={onChange}
-              value={value}
-              style={styles.input}
-            />
-          )}
-        />
-        <Controller
-          name='cpf'
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              label='CPF'
-              mode='outlined'
-              onChangeText={onChange}
-              value={value}
-              style={styles.input}
-            />
-          )}
-        />
-        <View style={styles.divDataNascimento}>
-          <Text>Data de Nascimento</Text>
-          <Text style={styles.textData}>{moment(date).format("DD/MM/YYYY")}</Text>
-          <Button onPress={show}>mudar</Button>
+    <ScrollView>
+      <View style={styles.container}>
+        <Text variant='headlineMedium' style={styles.titulo}>
+          Cadastro de usuário
+        </Text>
+        <View style={styles.divInputs}>
+          <Controller
+            name='nome'
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                label='Nome Completo'
+                mode='outlined'
+                onChangeText={onChange}
+                value={value}
+                style={styles.input}
+              />
+            )}
+          />
+          <Controller
+            name='email'
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                label='Email'
+                mode='outlined'
+                onChangeText={onChange}
+                value={value}
+                style={styles.input}
+              />
+            )}
+          />
+          <Controller
+            name='senha'
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                label='Senha'
+                mode='outlined'
+                onChangeText={onChange}
+                value={value}
+                style={styles.input}
+              />
+            )}
+          />
+          <Controller
+            name='telefone'
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                label='Telefone'
+                mode='outlined'
+                onChangeText={onChange}
+                value={value}
+                style={styles.input}
+              />
+            )}
+          />
+          <Controller
+            name='cpf'
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                label='CPF'
+                mode='outlined'
+                onChangeText={onChange}
+                value={value}
+                style={styles.input}
+              />
+            )}
+          />
+          <View style={styles.divDataNascimento}>
+            <Text>Data de Nascimento</Text>
+            <Text style={styles.textData}>{moment(date).format("DD/MM/YYYY")}</Text>
+            <Button onPress={show}>mudar</Button>
+          </View>
+        </View>
+        <View style={styles.divBotoes}>
+          <Button mode='contained' onPress={() => navigation.goBack()} style={styles.botao}>
+            Voltar
+          </Button>
+          <Button mode='contained' style={styles.botao} onPress={handleSubmit(onSubmit)}>
+            Cadastrar
+          </Button>
         </View>
       </View>
-      <View style={styles.divBotoes}>
-        <Button mode='contained' onPress={() => navigation.goBack()} style={styles.botao}>
-          Voltar
-        </Button>
-        <Button mode='contained' style={styles.botao} onPress={handleSubmit(onSubmit)}>
-          Cadastrar
-        </Button>
-      </View>
-    </View>
+    </ScrollView>
   )
 }
 

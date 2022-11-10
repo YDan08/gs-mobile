@@ -31,25 +31,6 @@ export const AuthProvider = ({ children }) => {
     setLogged(false)
   }
 
-  const verificarUser = async () => {
-    const infoUser = await AsyncStorage.getItem("@id")
-    if (infoUser) {
-      const mulher = await (await api.get(`/api/mulher/${infoUser}`)).data
-      if (mulher) {
-        setMulher(mulher)
-        setLogged(true)
-      } else {
-        await AsyncStorage.removeItem("@id")
-        setMulher(false)
-        setLogged(false)
-      }
-    } else {
-      await AsyncStorage.removeItem("@id")
-      setMulher(false)
-      setLogged(false)
-    }
-  }
-
   const pegarOcorrencias = async () => {
     const data = await (await api.get("/api/localEscolhido")).data
     if (data) {
@@ -58,7 +39,6 @@ export const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    verificarUser()
     pegarOcorrencias()
   }, [])
 
